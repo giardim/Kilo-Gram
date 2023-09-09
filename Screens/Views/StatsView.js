@@ -1,25 +1,53 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
-import Dialog from "react-native-dialog"
+import Dialog from "react-native-dialog";
+import { SkPath, Circle, Group,     Canvas } from '@shopify/react-native-skia';
 
-const data = [
-]
+const workoutList = [];
 
 
+//Stats View component
 export default function StatsView({Navigation}){
     const [visible, setVisible] = useState(false);
+    const size = 256;
+    const r = size * 100;
     return(
-        <View>
+        <View style={{flex:3, justifyContent:'right'}}>
+             <Dropdown
+                    data = {workoutList}
+                    style={styles.dd_listOfWorkouts}
+                    labelField="label"
+                    valueField="value"
+                    placeholder= 'Select Stat'
+                    activeColor='#43423d'
+                    inactiveColor='#706e66'
+                    selectedTextStyle={{
+                        color:'white',
+                        fontSize:25
+                    }}
+                    placeholderStyle={{
+                        color:'white',
+                        fontSize:25
+                    }}
+                    onChange={testing}/>
             <Dialog_addWorkoutDialog 
                 visible={visible}
                 setVisible={setVisible}/>
-            <Dropdown
-                data = {data}
-                style={styles.dd_listOfWorkouts}
-                labelField="label"
-                valueField="value"
-            />
+            <ScrollView style={styles.sv_list}>
+                <Canvas style={{ flex: 1 }}>
+                    <Group blendMode="multiply">
+                        <Circle cx={r} cy={r} r={r} color="cyan" />
+                        <Circle cx={size - r} cy={r} r={r} color="magenta" />
+                        <Circle
+                          cx={size/2}
+                          cy={size - r}
+                          r={r}
+                          color="yellow"
+                        />
+                    </Group>
+                </Canvas>
+            </ScrollView>
             <TouchableOpacity style={styles.btn_addWorkout}
             onPress={() => fn_addWorkout(setVisible)}>
                 <Text
@@ -30,6 +58,8 @@ export default function StatsView({Navigation}){
     );
 }
 
+
+//Dialog box to allow the user to add a new workout/stat
 const Dialog_addWorkoutDialog = ({visible, setVisible}) =>{
     const btn_handleOkay = (etxt_addWorkout) =>{
         console.log(etxt_addWorkout);
@@ -50,7 +80,9 @@ const Dialog_addWorkoutDialog = ({visible, setVisible}) =>{
                 Add the stat you want to start tracking:
             </Dialog.Description>
             <Dialog.Input
-                onChangeText={setStat}/>
+                onChangeText={setStat}
+                placeholder="e.g. 'Deadlift'"
+                />
             <Dialog.Button label="Cancel" 
                 onPress={btn_handleCancel}/>
             <Dialog.Button label="Okay" 
@@ -61,11 +93,12 @@ const Dialog_addWorkoutDialog = ({visible, setVisible}) =>{
 };
 
 
-
+//Button to show the dialog and add a new stat
 const fn_addWorkout = (setVisible) => {
     setVisible(true);
 };
 
+//Styles
 const styles = StyleSheet.create({
     container_homeView: {
         padding: 10,
@@ -81,14 +114,30 @@ const styles = StyleSheet.create({
     btn_addWorkout:{
         height: 50, 
         width: 150, 
-        marginTop: 10, 
+        marginTop: 3,
+        marginBottom:5,
         backgroundColor:'#00a0ff', 
         alignItems:'center', 
         justifyContent:'center',
         borderRadius:50
     },
     dd_listOfWorkouts:{
-        backgroundColor: 'white',
-        color: 'black'
-    }
+        backgroundColor: '#161614',
+        borderColor: 'black',
+        borderWidth: 2,
+        borderRadius:6,
+    },
+    sv_list: {
+        height: '80%',
+        backgroundColor: '#22211f',
+        borderRadius:19
+    },
+    selectedTextStyle: {
+        fontSize: 16,
+        color:'white'
+      }
 });
+
+const testing = () =>{
+    alert("Hello world");
+}
