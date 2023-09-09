@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
 # dependencies
@@ -34,7 +33,6 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
-=======
 # Gradle files
 .gradle/
 build/
@@ -68,4 +66,3 @@ google-services.json
 
 # Android Profiling
 *.hprof
->>>>>>> e256323c9ba261a6c80d0c8598d62f4b6d80c611
